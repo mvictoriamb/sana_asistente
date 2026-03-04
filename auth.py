@@ -12,16 +12,13 @@ def autenticar_cuenta(nombre_cuenta, archivo_token):
     creds = None
     
     if os.path.exists(archivo_token):
-        # print(f"[{nombre_cuenta}] Cargando token...") # SILENCIADO
         try:
             creds = Credentials.from_authorized_user_file(archivo_token, SCOPES)
         except Exception:
-            # print(f"[{nombre_cuenta}] Token corrupto.") # SILENCIADO
             creds = None
 
     if not creds or not creds.valid:
         if creds and creds.expired and creds.refresh_token:
-            # print(f"[{nombre_cuenta}] Refrescando token...") # SILENCIADO
             try:
                 creds.refresh(Request())
             except Exception:
@@ -37,3 +34,20 @@ def autenticar_cuenta(nombre_cuenta, archivo_token):
             token.write(creds.to_json())
 
     return creds
+
+
+if __name__ == "__main__":
+    # Nombres EXACTOS de los archivos que main.py espera
+    cuentas = {
+        "Personal": "token_personal.json",
+        "UMA": "token_uma.json",
+        "Secundaria": "token_tercero.json"
+    }
+
+    for nombre, archivo in cuentas.items():
+        print(f"\n--- Preparando token para: {nombre} ---")
+        creds_generadas = autenticar_cuenta(nombre, archivo)
+        if creds_generadas and creds_generadas.valid:
+            print(f"✅ Token generado correctamente para {nombre}.")
+        else:
+            print(f"❌ Fallo al generar el token para {nombre}.")
