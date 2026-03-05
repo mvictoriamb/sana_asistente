@@ -24,7 +24,7 @@ def analizar_correos_con_gemini(buzon_unificado):
     prompt = f"""
     Eres un asistente. Analiza estos correos: {data_str}
     
-    1. Filtra lo importante (UMA, Ciberseguridad, Profesores, Bancos).
+    1. Filtra lo que consideres importante o urgente.
     2. Genera un resumen hablado breve. NO leas la lista uno por uno, agrúpalos (ej: "Tienes 3 correos de la UMA").
     """
     try:
@@ -90,4 +90,5 @@ def limpiar_cuerpo_para_voz(texto_cuerpo):
         response = model.generate_content(prompt)
         return response.text
     except:
+
         return texto_cuerpo[:500]
